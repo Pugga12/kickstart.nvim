@@ -177,7 +177,7 @@ vim.diagnostic.config {
   update_in_insert = false,
   severity_sort = true,
   float = { border = 'rounded', source = 'if_many' },
-  underline = { severity = { min = vim.diagnostic.severity.WARN } },
+  underline = { severity = { min = vim.diagnostic.severity.INFO } },
 
   -- Can switch between these as you prefer
   virtual_text = true, -- Text shows up at the end of the line
@@ -211,6 +211,10 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+vim.keymap.set('n', '<leader>ev', function() vim.cmd('edit $MYVIMRC') end, { desc = 'Edit config' })
+vim.keymap.set('n', 'gh', vim.lsp.buf.hover, { desc = 'Hover Docs' })
+
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -417,6 +421,11 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch [C]ommands' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
+
+      vim.keymap.set('n', 'gd', builtin.lsp_definitions, { desc = 'Definitions' })
+      vim.keymap.set('n', 'gi', builtin.lsp_implementations, { desc = 'Implementations' })
+      vim.keymap.set('n', 'gr', builtin.lsp_references, { desc = 'References' })
+      vim.keymap.set('n', 'gt', builtin.lsp_type_definitions, { desc = 'Type Definitions' })
       -- This runs on LSP attach per buffer (see main LSP attach function in 'neovim/nvim-lspconfig' config for more info,
       -- it is better explained there). This allows easily switching between pickers if you prefer using something else!
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -805,6 +814,19 @@ require('lazy').setup({
     },
   },
 
+  {
+    "pandalec/gradle.nvim",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+      "akinsho/toggleterm.nvim",
+    },
+    config = function()
+      require("gradle").setup({
+        load_on_startup = true, -- optional
+      })
+    end,
+  },
+
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
@@ -985,6 +1007,42 @@ require('lazy').setup({
     },
   },
 })
+
+require('lspconfig').harper_ls.setup {
+  filetypes = {"markdown", "text", "gitcommit"},
+  settings = {
+    ["harper-ls"] = {
+      userDictPath = "",
+      workspaceDictPath = "",
+      fileDictPath = "",
+      linters = {
+        SpellCheck = true,
+        SpelledNumbers = false,
+        AnA = true,
+        SentenceCapitalization = true,
+        UnclosedQuotes = true,
+        WrongQuotes = false,
+        LongSentences = true,
+        RepeatedWords = true,
+        Spaces = true,
+        Matcher = true,
+        CorrectNumberSuffix = true
+      },
+      codeActions = {
+        ForceStable = false
+      },
+      markdown = {
+        IgnoreLinkTitle = false
+      },
+      diagnosticSeverity = "hint",
+      isolateEnglish = false,
+      dialect = "American",
+      maxFileLength = 120000,
+      ignoredLintsPath = "",
+      excludePatterns = {}
+    }
+  }
+}
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
