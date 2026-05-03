@@ -177,7 +177,7 @@ vim.diagnostic.config {
   update_in_insert = false,
   severity_sort = true,
   float = { border = 'rounded', source = 'if_many' },
-  underline = { severity = { min = vim.diagnostic.severity.INFO } },
+  underline = { severity = { min = vim.diagnostic.severity.HINT } },
 
   -- Can switch between these as you prefer
   virtual_text = true, -- Text shows up at the end of the line
@@ -1043,6 +1043,11 @@ require('lspconfig').harper_ls.setup {
     }
   }
 }
+
+-- Define custom highlights for Grammar/Hints
+-- Undercurl is great for grammar (looks like Microsoft Word/Grammarly)
+vim.api.nvim_set_hl(0, 'DiagnosticUnderlineHint', { undercurl = true, sp = "#1abc9c" })
+vim.api.nvim_set_hl(0, 'DiagnosticHint', { fg = "#1abc9c" })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
