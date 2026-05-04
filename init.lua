@@ -903,6 +903,24 @@ require('lazy').setup({
     end,
   },
 
+    -- lazy.nvim
+  {
+      "lowitea/aw-watcher.nvim",
+      opts = {  -- required, but can be empty table: {}
+          -- add any options here
+          -- for example:
+          aw_server = {
+              host = "127.0.0.1",
+              port = 5600,
+          },
+      },
+  },
+
+  {
+      'nvim-lualine/lualine.nvim',
+      dependencies = { 'nvim-tree/nvim-web-devicons' }
+  },
+
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     lazy = false,
@@ -1048,6 +1066,7 @@ require('lspconfig').harper_ls.setup {
 -- Undercurl is great for grammar (looks like Microsoft Word/Grammarly)
 vim.api.nvim_set_hl(0, 'DiagnosticUnderlineHint', { undercurl = true, sp = "#1abc9c" })
 vim.api.nvim_set_hl(0, 'DiagnosticHint', { fg = "#1abc9c" })
+require("bubbles")
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
